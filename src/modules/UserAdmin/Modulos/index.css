@@ -1,0 +1,20 @@
+
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  gap: 20px;
+}
+
+
+.SwitchesForm{
+  display: flex;
+   justify-content: space-between;}
+
+
+.AppIconList{
+  border: 1px solid #dfa506;
+  border-radius: 4px;
+  
+}

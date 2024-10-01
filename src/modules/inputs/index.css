@@ -1,0 +1,17 @@
+.login-card {
+  padding: 20px;
+  margin-top: 10%;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  gap: 20px;
+}
+
+.btn-box {
+  display: flex;
+  margin: 10px 0px;
+  gap: 10px;
+}

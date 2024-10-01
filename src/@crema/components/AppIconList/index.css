@@ -1,0 +1,48 @@
+.CustonListIcon{
+    display: grid;
+    grid-template-columns: repeat(4 , 1fr);
+    justify-items: center;
+    gap: 20px;
+
+
+}
+
+@media (max-width: 500px) {
+    .CustonListIcon {
+        grid-template-columns: repeat(3, 1fr);
+        
+  }}
+
+@media (max-width: 400px) {
+    .CustonListIcon {
+        grid-template-columns: repeat(2, 1fr);
+        }
+  }
+
+.CustonListIcon::-webkit-scrollbar{
+    width: 8px;
+    
+    
+}
+.CustonListIcon::-webkit-scrollbar-thumb{
+    background: #2997ff ;
+    border-radius: 5px;
+}
+
+.CustonListIcon::-webkit-scrollbar-thumb:hover{
+    cursor: pointer;
+}
+
+
+.selected-icon{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.list-icon{
+    cursor: pointer;
+}
