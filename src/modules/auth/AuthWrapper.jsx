@@ -78,7 +78,7 @@ const AuthWrapper = ({ children }) => {
                 textAlign: 'center',
               }}
             >
-              Sistema de cotización 14100
+              SISTEMA DE CAFILCULTORES
             </Typography>
             {/*  <Typography>
               Crema is purely based on Material ui components and follows
