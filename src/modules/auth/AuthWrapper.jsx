@@ -19,7 +19,8 @@ const AuthWrapper = ({ children }) => {
       <Card
         sx={{
           maxWidth: 900,
-          minHeight: { xs: 320, sm: 450 },
+          minHeight: { xs: 350, sm: 450 },
+          height: '95%',
           width: '100%',
           overflow: 'hidden',
           position: 'relative',
@@ -28,7 +29,7 @@ const AuthWrapper = ({ children }) => {
       >
         <Box
           sx={{
-            width: { xs: '100%', sm: '50%', lg: '40%' },
+            width: { xs: '100%', sm: '1000%', lg: '100%' },
             padding: { xs: 5, lg: 10 },
             display: 'flex',
             flexDirection: 'column',
@@ -50,7 +51,7 @@ const AuthWrapper = ({ children }) => {
             {children}
           </Box>
         </Box>
-        <Box
+        {/* <Box
           sx={{
             width: { xs: '100%', sm: '50%', lg: '60%' },
             position: 'relative',
@@ -83,9 +84,9 @@ const AuthWrapper = ({ children }) => {
             {/*  <Typography>
               Crema is purely based on Material ui components and follows
               Material ui guidelines.
-            </Typography> */}
+            </Typography>
           </Box>
-        </Box>
+        </Box> */}
       </Card>
     </Box>
   );
