@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { FastField } from 'formik';
 
 export default function AppAutoComplete({
-  variant = 'outlined',
+  variant = 'filled',
   options = [],
   onType = () => {},
   handleBlur = () => {},
@@ -54,6 +54,7 @@ export default function AppAutoComplete({
           <Autocomplete
             disabled={disabled}
             multiple={multiple}
+            size='small'
             onChange={(e, val) => {
               onSelectValue(e, val, form);
             }}

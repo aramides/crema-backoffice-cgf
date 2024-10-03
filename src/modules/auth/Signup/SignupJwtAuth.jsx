@@ -13,6 +13,7 @@ import { Fonts } from '@crema/constants/AppEnums';
 import { Link } from 'react-router-dom';
 import AuthWrapper from '../AuthWrapper';
 import { registerSchema } from '@crema/constants/Schemas/RegisterSchema';
+import AppAutocompleteField from '@crema/components/AppFormComponents/AppAutocompleteField';
 
 const validationSchema = yup.object({
   name: yup.string().required(<IntlMessages id='validation.nameRequired' />),
@@ -60,10 +61,59 @@ const SignupJwtAuth = () => {
             <Form style={{ textAlign: 'left' }} noValidate autoComplete='off'>
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
-                  <AppTextField name='firstName' label='Código' />
+                  <AppAutocompleteField
+                    name='perfil'
+                    label='Tipo de Organización'
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <AppTextField name='code' label='Código SITUR' />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={4}>
+                      <AppAutocompleteField
+                        name='tipo_rif'
+                        label='Tipo de RIF'
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <AppTextField name='rif' label='RIF de la Organizacion' />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <AppTextField
+                    name='firstName'
+                    label='Nombre de la Organizacion'
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <AppAutocompleteField name='estadoId' label='Estado' />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <AppAutocompleteField name='idMunicipio' label='Municipio' />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <AppAutocompleteField name='idParroquia' label='Parroquia' />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <AppTextField
+                    name='nombreComunidad'
+                    label='Nombre de la Comunidad'
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <AppTextField
+                    name='nombreComunidad'
+                    label='Comunidad o Sector'
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <AppAutocompleteField
+                    name='perteneceA'
+                    label='Comuna / Circuito'
+                  />
                 </Grid>
               </Grid>
 
