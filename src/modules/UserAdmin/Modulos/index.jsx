@@ -1,6 +1,6 @@
 import AppDialog from '@crema/components/AppDialog';
 import { Button, Card, CardContent, Paper, CardHeader } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Tablas from '@crema/components/AppTablas/Tablas';
 import Formulario from './components/Formulario';
 
