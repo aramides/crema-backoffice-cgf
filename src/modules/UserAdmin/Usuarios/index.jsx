@@ -1,36 +1,29 @@
 import { useState } from 'react';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Chip,
-  Paper,
-} from '@mui/material';
+import { Button, Card, CardContent, CardHeader, Paper } from '@mui/material';
 import Tablas from '@crema/components/AppTablas/Tablas';
 import AppDialog from '@crema/components/AppDialog';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import jwtAxios from '@crema/services/auth/jwt-auth';
-import DoneOutlineRoundedIcon from '@mui/icons-material/DoneOutlineRounded';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+/* import DoneOutlineRoundedIcon from '@mui/icons-material/DoneOutlineRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded'; */
 import AppDialogModal from '@crema/components/AppDialog-modal';
 import FormUsers from './components/FormUsers';
 
 const Usuarios = () => {
   const queryClient = useQueryClient();
-  const [row, setRow] = useState({});
+  const [row] = useState({});
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [pageState, setPageState] = useState({
-    page: 0,
+    rowId: '_id',
+    page: 1,
     pageSize: 10,
     data: [],
     total: 0,
-    totalPages: 0,
   });
 
   const { isLoading } = useQuery({
-    queryKey: ['users', pageState.page, pageState.rowsPerPage],
+    queryKey: ['users', pageState.page, pageState.pageSize],
     queryFn: () => FetchData(),
   });
 
@@ -54,18 +47,17 @@ const Usuarios = () => {
   });
 
   const FetchData = async () => {
-    const response = await jwtAxios.get('users/table', {
+    const response = await jwtAxios.get('usuariosComunas/table', {
       params: {
         page: pageState.page,
-        take: pageState.pageSize,
+        limit: pageState.pageSize,
       },
     });
+
     setPageState({
       ...pageState,
       data: response.data.data,
-      page: response.data.currentPage,
-      total: response.data.totalData,
-      totalPages: response.data.totalPages,
+      total: response.data.count,
     });
     return response.data;
   };
@@ -75,30 +67,36 @@ const Usuarios = () => {
   };
   const handleClose = () => setOpen(false);
 
-  const handleOpenDialog = (row) => {
+  /*  const handleOpenDialog = (row) => {
     setRow(row);
     setOpenDialog(true);
-  };
-
+  }; */
+  /* 
+  console.log(pageState); */
   const columns = [
-    { field: 'id', headerName: 'ID', width: 30 },
+    {
+      field: 'code',
+      headerName: 'Codigo Situr',
+      renderCell: ({ row: { code } }) => {
+        return `${code}`;
+      },
+      width: 150,
+    },
     {
       field: 'email',
       headerName: 'Correo',
       minWidth: 150,
+      maxWidth: 250,
       flex: 1,
     },
+
+    { field: 'firstName', headerName: 'Nombre de la comunidad', width: 250 },
     {
-      field: 'ci',
-      headerName: 'Cedula',
-      renderCell: ({ row: { ci, nationality } }) => {
-        return `${nationality}-${ci}`;
-      },
-      width: 80,
+      field: 'cuentaBancariaComuna',
+      headerName: 'Cuenta Bancaria',
+      width: 200,
     },
-    { field: 'birthdate', headerName: 'Fecha Nacimiento', width: 130 },
-    { field: 'phone', headerName: 'Telefono', width: 100 },
-    {
+    /*    {
       field: 'isActive',
       headerName: 'Estatus',
       width: 120,
@@ -125,7 +123,7 @@ const Usuarios = () => {
           />
         );
       },
-    },
+    }, */
   ];
 
   return (

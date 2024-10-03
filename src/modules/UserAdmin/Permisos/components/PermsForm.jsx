@@ -14,7 +14,7 @@ const PermsForm = ({ postPerm, editPerm, perm, isEdit = false, onClose }) => {
 
   const on_Submit = (values) => {
     if (isEdit === true) {
-      editPerm({ ...values, id: perm.id });
+      editPerm({ ...values, _id: perm._id });
     } else {
       postPerm({ ...values });
     }
