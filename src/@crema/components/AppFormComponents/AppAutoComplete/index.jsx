@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { FastField } from 'formik';
 
 export default function AppAutoComplete({
-  variant = 'outlined',
+  variant = 'filled',
   options = [],
   onType = () => {},
   handleBlur = () => {},
@@ -28,7 +28,7 @@ export default function AppAutoComplete({
   valueOptions = 'id',
 }) {
   const loading = !disabled && dataLoading;
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState();
 
   const onSelectValue = (e, val, form) => {
     // const event = {
@@ -41,9 +41,11 @@ export default function AppAutoComplete({
     //         : val?.[valueOptions],
     //   },
     // };
+
+    console.log('e', val);
     if (handleChange) handleChange(e);
-    form.handleChange(e);
-    form.setFieldValue(name, val.value);
+
+    form.setFieldValue(name, val[valueOptions]);
   };
 
   return (
@@ -54,6 +56,7 @@ export default function AppAutoComplete({
           <Autocomplete
             disabled={disabled}
             multiple={multiple}
+            size='small'
             onChange={(e, val) => {
               onSelectValue(e, val, form);
             }}
@@ -61,6 +64,7 @@ export default function AppAutoComplete({
             options={options}
             loading={loading}
             name={name}
+            autoSelect
             inputValue={inputValue}
             onInputChange={(event, newInputValue) => {
               setInputValue(newInputValue);
@@ -87,7 +91,9 @@ export default function AppAutoComplete({
                 {...params}
                 label={label}
                 variant={variant}
-                onChange={(ev) => onType(ev.target.value)}
+                onChange={(ev) => {
+                  onType(ev.target.value);
+                }}
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (
