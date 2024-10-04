@@ -27,38 +27,39 @@ const Permisos = () => {
   const { messages } = useIntl();
 
   const [pageState, setPageState] = useState({
+    rowId: '_id',
     page: 0,
     pageSize: 10,
     data: [],
     total: 0,
-    totalPages: 0,
   });
 
   const FetchData = async () => {
-    const response = await jwtAxios.get('permissions', {
+    const response = await jwtAxios.get('permisos/table', {
       params: {
         page: pageState.page,
-        take: pageState.pageSize,
+        limit: pageState.pageSize,
       },
     });
+
     setPageState({
       ...pageState,
-      data: response.data.data,
-      total: response.data.totalData,
-      totalPages: response.data.totalPages,
+      data: response.data.data.data,
+      total: response.data.data.count,
     });
     return response.data;
   };
 
   const { isLoading } = useQuery({
-    queryKey: ['permisos', pageState.page, pageState.rowsPerPage],
+    queryKey: ['permisos', pageState.page, pageState.pageSize],
     queryFn: () => FetchData(),
   });
 
   //CREAR PERMISOS
   const { mutate: postPermissions } = useMutation({
     mutationFn: (params) => {
-      return jwtAxios.post(`permissions`, params).then((res) => res.data);
+      console.log(params);
+      return jwtAxios.post(`permisos/`, { ...params }).then((res) => res.data);
     },
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['permisos'] });
@@ -69,7 +70,9 @@ const Permisos = () => {
   //ELIMINAR PERMISOS
   const { mutate: isDelete } = useMutation({
     mutationFn: (params) => {
-      return jwtAxios.put(`permissions/${params.id}`).then((res) => res.data);
+      return jwtAxios
+        .delete(`permisos/`, { data: params })
+        .then((res) => res.data);
     },
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['permisos'] });
@@ -79,11 +82,9 @@ const Permisos = () => {
   //EDITAR PERMISOS
   const { mutate: editPermissions } = useMutation({
     mutationFn: (params) => {
-      const { id, name, description } = params;
-      return jwtAxios
-        .patch(`permissions/${id}`, { name, description })
-        .then((res) => res.data);
+      return jwtAxios.put(`permisos/`, params).then((res) => res.data);
     },
+
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['permisos'] });
     },
