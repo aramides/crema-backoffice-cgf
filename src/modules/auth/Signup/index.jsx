@@ -1,3 +1,3 @@
-import SignupFirebase from './SignupFirebase';
+import SignupJwtAuth from './SignupJwtAuth';
 
-export default SignupFirebase;
+export default SignupJwtAuth;
