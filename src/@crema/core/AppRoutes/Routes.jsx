@@ -19,22 +19,21 @@ const Dashboard = React.lazy(
   () => import('../../../modules/dashboard/Estadistica'),
 );
 const ReportsData = React.lazy(() => import('../../../modules/reportsData'));
-const DirectorsManagement = React.lazy(
-  () => import('../../../modules/directorsManagement'),
+
+const ProyectosRetornables = React.lazy(
+  () =>
+    import(
+      '../../../modules/proyectos/proyectosRetornables/ProyectosRetornables'
+    ),
 );
 
 export const RoutesConfig = [
   {
     permittedRole: RoutePermittedRole.User,
-    path: '/gestion-directores',
-    element: <DirectorsManagement />,
+    path: ['/proyectos/retornables', '/proyectos/retornables/:id'],
+    element: <ProyectosRetornables />,
   },
 
-  {
-    permittedRole: RoutePermittedRole.User,
-    path: '/inputs',
-    element: <Inputs />,
-  },
   {
     permittedRole: RoutePermittedRole.User,
     path: '/dashboard',

@@ -16,7 +16,28 @@ const NoRowData = () => {
   );
 };
 
-const Tablas = ({ pageState, setPageState, loading, columns }) => {
+/**
+ * Componente que renderiza una tabla con paginaci n
+ * Recibe como props:
+ * - pageState: objeto con la informacion de la p gina actual (data, page, pageSize, total)
+ * - setPageState: funci n para cambiar el estado de la p gina
+ * - loading: booleano que indica si la tabla est  cargando
+ * - columns: array de columnas a mostrar en la tabla
+ * La tabla se renderiza con la opcion de paginacion serverSide,
+ * es decir, se le pasa a la tabla la informacion de la pagina actual y
+ * la cantidad total de filas, y la tabla se encarga de mostrar la p gina
+ * correspondiente y los botones para cambiar de pagina.
+ * Tambien se puede personalizar el tama o de la pagina y mostrar un mensaje
+ * personalizado si no hay datos.
+ */
+
+const Tablas = ({
+  pageState,
+  setPageState,
+  loading,
+  columns,
+  handleOnRowClick = () => null,
+}) => {
   const { data, page, pageSize, total } = pageState;
 
   return (
@@ -26,6 +47,7 @@ const Tablas = ({ pageState, setPageState, loading, columns }) => {
         columns={columns}
         getRowId={(row) => row[pageState.rowId] ?? row.id}
         loading={loading}
+        onRowClick={handleOnRowClick}
         rowCount={total}
         paginationMode='server'
         paginationModel={{ page, pageSize }}
@@ -36,7 +58,6 @@ const Tablas = ({ pageState, setPageState, loading, columns }) => {
         pageSizeOptions={[1, 10, 25, 50, 100]}
         localeText={esES.components.MuiDataGrid.defaultProps.localeText}
         onPaginationModelChange={(newModel) => {
-          console.log(newModel, 'newModel');
           setPageState({
             ...pageState,
             page: newModel.page,
