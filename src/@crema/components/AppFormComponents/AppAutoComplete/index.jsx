@@ -31,20 +31,6 @@ export default function AppAutoComplete({
   const [inputValue, setInputValue] = useState();
 
   const onSelectValue = (e, val, form) => {
-    // const event = {
-    //   ...e,
-    //   target: {
-    //     name,
-    //     val:
-    //       multiple === true
-    //         ? val.map((data) => data?.[valueOptions])
-    //         : val?.[valueOptions],
-    //   },
-    // };
-
-    console.log('e', val);
-    if (handleChange) handleChange(e);
-
     form.setFieldValue(name, val[valueOptions]);
   };
 
@@ -52,13 +38,14 @@ export default function AppAutoComplete({
     <FastField name={name}>
       {({ form }) => (
         <>
-          {/* {console.log('field', field, meta, form)} */}
           <Autocomplete
             disabled={disabled}
             multiple={multiple}
             size='small'
             onChange={(e, val) => {
               onSelectValue(e, val, form);
+
+              handleChange(val);
             }}
             getOptionLabel={(option) => option?.[labelOptions]}
             options={options}
@@ -66,7 +53,7 @@ export default function AppAutoComplete({
             name={name}
             autoSelect
             inputValue={inputValue}
-            onInputChange={(event, newInputValue) => {
+            onInputChange={(e, newInputValue) => {
               setInputValue(newInputValue);
             }}
             onBlur={(e) => {

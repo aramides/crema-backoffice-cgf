@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { Checkbox, Grid } from '@mui/material';
 import { Form, Formik, FormikProvider, useFormik } from 'formik';
@@ -14,7 +14,10 @@ import { Link } from 'react-router-dom';
 import AuthWrapper from '../AuthWrapper';
 import { registerSchema } from '@crema/constants/Schemas/RegisterSchema';
 import AppAutocompleteField from '@crema/components/AppFormComponents/AppAutocompleteField';
+// import { FilePond, registerPlugin } from 'react-filepond';
+// import 'filepond/dist/filepond.min.css';
 import InputArchive from '@crema/components/AppInputArchive/AppInputArchive';
+import InputMaskArray from '@crema/components/AppInputMaskArray/AppInputMaskArray';
 
 const validationSchema = yup.object({
   name: yup.string().required(<IntlMessages id='validation.nameRequired' />),
@@ -27,8 +30,10 @@ const validationSchema = yup.object({
     .required(<IntlMessages id='validation.passwordRequired' />),
 });
 
+// registerPlugin();
 const SignupJwtAuth = () => {
-  const { signUpUser } = useAuthMethod();
+  // const { signUpUser } = useAuthMethod();
+  const [errorFiles, setErrorFiles] = useState({});
 
   const RIF_TIPOS = [
     {
@@ -106,7 +111,7 @@ const SignupJwtAuth = () => {
       email: '',
       idMunicipio: '',
       estadoId: '',
-      cuentaBancariaComuna: '0102',
+      cuentaBancariaComuna: '',
       tipo_rif: 'C',
       actaConstitutiva: [],
       certificado: [],
@@ -121,6 +126,7 @@ const SignupJwtAuth = () => {
     },
   });
   console.log(Formik.values);
+
   return (
     <AuthWrapper>
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -206,12 +212,23 @@ const SignupJwtAuth = () => {
                     multiLabel={true}
                     valueOptions='id'
                     labelOptions='label'
+                    isClearable={false}
+                    handleChange={(val) => {
+                      Formik.setFieldValue('cuentaBancariaComuna', val.id);
+                    }}
+                    handleBlur={Formik.onBlur}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <AppTextField
+                  <InputMaskArray
+                    label='Cuenta Bancaria de la organización'
                     name='cuentaBancariaComuna'
-                    label='Cuenta Bancaria'
+                    formik={Formik}
+                    type='cuenta'
+                    isRequired={true}
+                    mask={'9999-9999-999999999999'}
+                    handleChange={Formik.onChange}
+                    handleBlur={Formik.onBlur}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -221,13 +238,30 @@ const SignupJwtAuth = () => {
                   />
                 </Grid>
 
-                {/* <Grid item xs={12} sm={6}>
-                  <InputArchive
-                    label='Cargar Acta Constitutiva (de la Organizacion)'
-                    name='actaConstitutiva'
-                    acceptedFileTypes={['application/pdf']}
-                  />
-                </Grid> */}
+                {Formik.values.perfil !== '5' ? (
+                  <Grid item xs={12} sm={12}>
+                    <InputArchive
+                      label='Cargar Acta Constitutiva (de la Organizacion)'
+                      name='actaConstitutiva'
+                      acceptedFileTypes={['application/pdf']}
+                      formik={Formik}
+                      setErrorFiles={setErrorFiles}
+                      errorFiles={errorFiles}
+                    />
+                  </Grid>
+                ) : null}
+                {Formik.values.perfil !== '5' ? (
+                  <Grid item xs={12} sm={12}>
+                    <InputArchive
+                      label='Cargar Certificado (Opcional)'
+                      name='certificado'
+                      formik={Formik}
+                      acceptedFileTypes={['application/pdf']}
+                      setErrorFiles={setErrorFiles}
+                      errorFiles={errorFiles}
+                    />
+                  </Grid>
+                ) : null}
               </Grid>
 
               <div style={{ marginTop: 20 }}>
