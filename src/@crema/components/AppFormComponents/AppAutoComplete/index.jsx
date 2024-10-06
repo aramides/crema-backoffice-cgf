@@ -4,12 +4,14 @@ import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import PropTypes from 'prop-types';
 import { Chip } from '@mui/material';
+import { useState } from 'react';
+import { FastField } from 'formik';
 
 export default function AppAutoComplete({
+  variant = 'filled',
   options = [],
   onType = () => {},
-  keyName,
-  idField = 'id',
+  handleBlur = () => {},
   name,
   label,
   placeholder,
@@ -17,90 +19,87 @@ export default function AppAutoComplete({
   handleChange,
   disabled,
   disabledId = [],
-  value,
   helperText = '',
   error,
   multiple = false,
+  isClearable = true,
+
+  labelOptions = 'label',
+  valueOptions = 'id',
 }) {
   const loading = !disabled && dataLoading;
+  const [inputValue, setInputValue] = useState();
 
-  console.log(typeof options);
-
-  const onSelectValue = (e, value) => {
-    const event = {
-      target: {
-        name,
-        value:
-          multiple === true
-            ? value.map((data) => data?.[idField])
-            : value?.[idField],
-      },
-    };
-    if (handleChange) handleChange(event);
-  };
-
-  const getValue = () => {
-    if (multiple) {
-      if (value) {
-        return options?.filter((option) => value.includes(option?.[idField]));
-      } else {
-        return [];
-      }
-    }
-    return options?.find((option) => option?.[idField] === value) || null;
+  const onSelectValue = (e, val, form) => {
+    form.setFieldValue(name, val[valueOptions]);
   };
 
   return (
-    <Autocomplete
-      disabled={disabled}
-      multiple={multiple}
-      onChange={onSelectValue}
-      isOptionEqualToValue={(option, value) => {
-        if (multiple) {
-          return option?.[idField] === value?.[idField];
-        } else {
-          return option?.[idField] === value?.[idField];
-        }
-      }}
-      getOptionLabel={(option) => option?.[keyName]}
-      options={options}
-      loading={loading}
-      name={name}
-      value={getValue()}
-      renderTags={(tagValue, getTagProps) =>
-        tagValue.map((option, index) => (
-          <Chip
-            key={index}
-            label={option[keyName]}
-            {...getTagProps({ index })}
-            disabled={disabledId.indexOf(option?.[idField]) !== -1}
+    <FastField name={name}>
+      {({ form }) => (
+        <>
+          <Autocomplete
+            disabled={disabled}
+            multiple={multiple}
+            size='small'
+            onChange={(e, val) => {
+              onSelectValue(e, val, form);
+
+              handleChange(val);
+            }}
+            getOptionLabel={(option) => option?.[labelOptions]}
+            options={options}
+            loading={loading}
+            name={name}
+            autoSelect
+            inputValue={inputValue}
+            onInputChange={(e, newInputValue) => {
+              setInputValue(newInputValue);
+            }}
+            onBlur={(e) => {
+              handleBlur(e);
+              form.handleBlur(e);
+            }}
+            disableClearable={!isClearable}
+            renderTags={(tagValue, getTagProps) =>
+              tagValue.map((option, index) => (
+                <Chip
+                  key={index}
+                  label={option[labelOptions]}
+                  {...getTagProps({ index })}
+                  disabled={disabledId.indexOf(option?.[valueOptions]) !== -1}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                name={name}
+                placeholder={placeholder}
+                {...params}
+                label={label}
+                variant={variant}
+                onChange={(ev) => {
+                  onType(ev.target.value);
+                }}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {loading ? (
+                        <CircularProgress color='inherit' size={20} />
+                      ) : null}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
+                }}
+                helperText={helperText}
+                error={error}
+              />
+            )}
           />
-        ))
-      }
-      renderInput={(params) => (
-        <TextField
-          name={name}
-          placeholder={placeholder}
-          {...params}
-          label={label}
-          variant='outlined'
-          onChange={(ev) => onType(ev.target.value)}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loading ? (
-                  <CircularProgress color='inherit' size={20} />
-                ) : null}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            ),
-          }}
-          helperText={helperText}
-          error={error}
-        />
+        </>
       )}
-    />
+    </FastField>
   );
 }
 
@@ -111,7 +110,7 @@ AppAutoComplete.propTypes = {
   handleChange: PropTypes.func,
   placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   keyName: PropTypes.string,
-  idField: PropTypes.string,
+  valueOptions: PropTypes.string,
   value: PropTypes.any,
   name: PropTypes.string,
   label: PropTypes.string,
@@ -121,4 +120,8 @@ AppAutoComplete.propTypes = {
   helperText: PropTypes.string,
   error: PropTypes.bool,
   disabledId: PropTypes.bool,
+  handleBlur: PropTypes.func,
+  variant: PropTypes.string,
+  isClearable: PropTypes.bool,
+  labelOptions: PropTypes.string,
 };

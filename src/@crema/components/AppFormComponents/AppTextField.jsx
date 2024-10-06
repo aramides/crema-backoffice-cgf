@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 const AppTextField = ({
   label,
   name,
-  variant = 'outlined',
+  variant = 'filled',
   fullWidth = true,
 
   multiline = false,
@@ -21,6 +21,7 @@ const AppTextField = ({
         <TextField
           name={field.name}
           label={label}
+          size='small'
           variant={variant}
           helperText={errorText}
           error={!!errorText}
