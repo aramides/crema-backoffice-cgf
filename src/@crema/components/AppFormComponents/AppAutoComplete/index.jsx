@@ -23,12 +23,11 @@ export default function AppAutoComplete({
   error,
   multiple = false,
   isClearable = true,
-
+  defaultValue = '',
   labelOptions = 'label',
   valueOptions = 'id',
 }) {
   const loading = !disabled && dataLoading;
-  const [inputValue, setInputValue] = useState();
 
   const onSelectValue = (e, val, form) => {
     // const event = {
@@ -42,10 +41,12 @@ export default function AppAutoComplete({
     //   },
     // };
 
-    console.log('e', val);
     if (handleChange) handleChange(e);
-
-    form.setFieldValue(name, val[valueOptions]);
+    try {
+      if (form) form.setFieldValue(name, val[valueOptions]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -60,15 +61,16 @@ export default function AppAutoComplete({
             onChange={(e, val) => {
               onSelectValue(e, val, form);
             }}
-            getOptionLabel={(option) => option?.[labelOptions]}
+            getOptionLabel={(option) => {
+              return option?.[labelOptions];
+            }}
             options={options}
             loading={loading}
             name={name}
             autoSelect
-            inputValue={inputValue}
-            onInputChange={(event, newInputValue) => {
-              setInputValue(newInputValue);
-            }}
+            defaultValue={options.find(
+              (option) => option[valueOptions] === defaultValue,
+            )}
             onBlur={(e) => {
               handleBlur(e);
               form.handleBlur(e);
@@ -137,4 +139,5 @@ AppAutoComplete.propTypes = {
   variant: PropTypes.string,
   isClearable: PropTypes.bool,
   labelOptions: PropTypes.string,
+  defaultValue: PropTypes.string,
 };
