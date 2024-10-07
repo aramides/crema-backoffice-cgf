@@ -4,7 +4,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import PropTypes from 'prop-types';
 import { Chip } from '@mui/material';
-import { useState } from 'react';
 import { FastField } from 'formik';
 
 export default function AppAutoComplete({
@@ -16,22 +15,36 @@ export default function AppAutoComplete({
   label,
   placeholder,
   dataLoading,
-  handleChange,
+  handleChange = () => {},
   disabled,
   disabledId = [],
   helperText = '',
   error,
   multiple = false,
   isClearable = true,
-
+  defaultValue = '',
   labelOptions = 'label',
   valueOptions = 'id',
 }) {
   const loading = !disabled && dataLoading;
-  const [inputValue, setInputValue] = useState();
 
   const onSelectValue = (e, val, form) => {
-    form.setFieldValue(name, val[valueOptions]);
+    // const event = {
+    //   ...e,
+    //   target: {
+    //     name,
+    //     val:
+    //       multiple === true
+    //         ? val.map((data) => data?.[valueOptions])
+    //         : val?.[valueOptions],
+    //   },
+    // };
+
+    try {
+      if (form) form.setFieldValue(name, val[valueOptions]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -44,18 +57,25 @@ export default function AppAutoComplete({
             size='small'
             onChange={(e, val) => {
               onSelectValue(e, val, form);
-
               handleChange(val);
             }}
-            getOptionLabel={(option) => option?.[labelOptions]}
+            getOptionLabel={(option) => {
+              return option?.[labelOptions];
+            }}
             options={options}
             loading={loading}
             name={name}
             autoSelect
-            inputValue={inputValue}
-            onInputChange={(e, newInputValue) => {
-              setInputValue(newInputValue);
-            }}
+            defaultValue={
+              defaultValue
+                ? options.find(
+                    (option) => option[valueOptions] === defaultValue,
+                  )
+                : options.find(
+                    (option) =>
+                      option[valueOptions] === form.initialValues[name],
+                  )
+            }
             onBlur={(e) => {
               handleBlur(e);
               form.handleBlur(e);
@@ -124,4 +144,5 @@ AppAutoComplete.propTypes = {
   variant: PropTypes.string,
   isClearable: PropTypes.bool,
   labelOptions: PropTypes.string,
+  defaultValue: PropTypes.string,
 };
