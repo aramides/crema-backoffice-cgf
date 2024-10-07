@@ -4,7 +4,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import PropTypes from 'prop-types';
 import { Chip } from '@mui/material';
-import { useState } from 'react';
 import { FastField } from 'formik';
 
 export default function AppAutoComplete({
@@ -53,13 +52,14 @@ export default function AppAutoComplete({
     <FastField name={name}>
       {({ form }) => (
         <>
-          {/* {console.log('field', field, meta, form)} */}
           <Autocomplete
             disabled={disabled}
             multiple={multiple}
             size='small'
             onChange={(e, val) => {
               onSelectValue(e, val, form);
+
+              handleChange(val);
             }}
             getOptionLabel={(option) => {
               return option?.[labelOptions];
