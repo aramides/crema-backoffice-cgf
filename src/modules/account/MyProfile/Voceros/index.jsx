@@ -1,0 +1,49 @@
+import { Typography } from '@mui/material';
+import { Fonts } from '@crema/constants/AppEnums';
+import Button from '@mui/material/Button';
+import { useState } from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+
+import VoceroForm from './voceroForm';
+const Voceros = () => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <Typography
+        component='h3'
+        sx={{
+          fontSize: 16,
+          fontWeight: Fonts.BOLD,
+          mb: { xs: 3, lg: 5 },
+        }}
+      >
+        Voceros{' '}
+      </Typography>
+      <Button variant='outlined' onClick={handleClickOpen}>
+        Nuevo vocero
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogContent>
+          <VoceroForm />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cerrar</Button>
+          <Button type='submit'>Guardar</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
+
+export default Voceros;

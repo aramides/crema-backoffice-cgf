@@ -111,7 +111,7 @@ const SignupJwtAuth = () => {
       email: '',
       idMunicipio: '',
       estadoId: '',
-      cuentaBancariaComuna: '',
+      cuentaBancariaComuna: '0102',
       tipo_rif: 'C',
       actaConstitutiva: [],
       certificado: [],

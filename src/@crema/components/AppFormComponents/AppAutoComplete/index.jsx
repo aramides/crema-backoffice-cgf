@@ -15,7 +15,7 @@ export default function AppAutoComplete({
   label,
   placeholder,
   dataLoading,
-  handleChange,
+  handleChange = () => {},
   disabled,
   disabledId = [],
   helperText = '',
@@ -40,7 +40,6 @@ export default function AppAutoComplete({
     //   },
     // };
 
-    if (handleChange) handleChange(e);
     try {
       if (form) form.setFieldValue(name, val[valueOptions]);
     } catch (error) {
@@ -58,7 +57,6 @@ export default function AppAutoComplete({
             size='small'
             onChange={(e, val) => {
               onSelectValue(e, val, form);
-
               handleChange(val);
             }}
             getOptionLabel={(option) => {
@@ -68,9 +66,16 @@ export default function AppAutoComplete({
             loading={loading}
             name={name}
             autoSelect
-            defaultValue={options.find(
-              (option) => option[valueOptions] === defaultValue,
-            )}
+            defaultValue={
+              defaultValue
+                ? options.find(
+                    (option) => option[valueOptions] === defaultValue,
+                  )
+                : options.find(
+                    (option) =>
+                      option[valueOptions] === form.initialValues[name],
+                  )
+            }
             onBlur={(e) => {
               handleBlur(e);
               form.handleBlur(e);
