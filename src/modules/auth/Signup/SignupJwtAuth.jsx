@@ -111,7 +111,7 @@ const SignupJwtAuth = () => {
       email: '',
       idMunicipio: '',
       estadoId: '',
-      cuentaBancariaComuna: '',
+      cuentaBancariaComuna: '0102',
       tipo_rif: 'C',
       actaConstitutiva: [],
       certificado: [],
@@ -225,7 +225,7 @@ const SignupJwtAuth = () => {
                     name='cuentaBancariaComuna'
                     formik={Formik}
                     type='cuenta'
-                    isRequired={true}
+                    // isRequired={true}
                     mask={'9999-9999-999999999999'}
                     handleChange={Formik.onChange}
                     handleBlur={Formik.onBlur}
