@@ -17,6 +17,7 @@ import Information from './Information';
 import Social from './Social';
 import Notification from './Notification';
 import accountData from '@crema/mockapi/fakedb/account';
+import Voceros from './Voceros';
 
 function a11yProps(index) {
   return {
@@ -47,6 +48,11 @@ const tabs = [
     icon: <NotificationsNoneIcon />,
     name: <IntlMessages id='healthCare.notification' />,
   },
+  {
+    id: 5,
+    icon: <BiUser />,
+    name: 'Voceros',
+  },
 ];
 
 const Account = () => {
@@ -72,7 +78,7 @@ const Account = () => {
             },
           }}
         >
-          My Account
+          Mi cuenta
         </Box>
       </AppAnimate>
       <AccountTabsWrapper key='2'>
@@ -102,6 +108,7 @@ const Account = () => {
             {value === 2 && <Information />}
             {value === 3 && <Social social={accountData.member} />}
             {value === 4 && <Notification />}
+            {value === 5 && <Voceros />}
           </Box>
         </AppAnimate>
       </AccountTabsWrapper>
