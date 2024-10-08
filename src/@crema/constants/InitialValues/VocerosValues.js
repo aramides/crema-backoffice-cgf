@@ -1,0 +1,18 @@
+export const initialValueVoceros = {
+  firstName: '',
+  middleName: '',
+  lastName: '',
+  secondLastName: ' ',
+  sex: '',
+  dateBirth: '',
+  userType_Id: '66f31ba3172a3d322947c48d',
+  apellido: '',
+  dni: '',
+  email: '',
+  nombre: '',
+  origin: 'V',
+  telefono: '',
+  telf_prefijo: '0416',
+  isAccountant: false,
+  perfil: '6',
+};

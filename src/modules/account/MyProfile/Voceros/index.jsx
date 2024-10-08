@@ -7,6 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
 import VoceroForm from './voceroForm';
+import VoceroTable from './voceroTable';
 const Voceros = () => {
   const [open, setOpen] = useState(false);
 
@@ -33,14 +34,14 @@ const Voceros = () => {
       <Button variant='outlined' onClick={handleClickOpen}>
         Nuevo vocero
       </Button>
+      <VoceroTable open={open} />
       <Dialog open={open} onClose={handleClose}>
-        <DialogContent>
-          <VoceroForm />
-        </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cerrar</Button>
-          <Button type='submit'>Guardar</Button>
+          <Button onClick={handleClose}>X</Button>
         </DialogActions>
+        <DialogContent>
+          <VoceroForm handleClose={handleClose} />
+        </DialogContent>
       </Dialog>
     </>
   );

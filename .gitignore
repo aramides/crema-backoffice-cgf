@@ -31,3 +31,5 @@ yarn-error.log*
 /.idea/prettier.xml
 /.idea/codeStyles/Project.xml
 /.idea/dictionaries/yogi0.xml
+
+dist/

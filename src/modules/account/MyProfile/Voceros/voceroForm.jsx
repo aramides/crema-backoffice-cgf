@@ -1,145 +1,149 @@
-import * as React from 'react';
-import { Form, Formik } from 'formik';
-import { Button, Checkbox } from '@mui/material';
-import * as yup from 'yup';
-import AppInfoView from '@crema/components/AppInfoView';
-import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
-import IntlMessages from '@crema/helpers/IntlMessages';
-import { useIntl } from 'react-intl';
+import Grid from '@mui/material/Grid';
 import AppTextField from '@crema/components/AppFormComponents/AppTextField';
 import { Fonts } from '@crema/constants/AppEnums';
 import AppAutoComplete from '@crema/components/AppFormComponents/AppAutoComplete';
+import { Form, useFormik, FormikProvider } from 'formik';
+import { vocerosSchema } from '@crema/constants/Schemas/VocerosSchema';
+import { initialValueVoceros } from '@crema/constants/InitialValues/VocerosValues';
+import { CedulaOptions } from '@crema/constants/Options/CedulaOptions';
+import { TelPrefixOptions } from '@crema/constants/Options/TelPrefixOptions';
+import { getPersona, PostVoceros } from '@crema/helpers/VoceroHelper';
+import AppCheckboxField from '@crema/components/AppFormComponents/AppCheckboxField';
+import InputMaskArray from '@crema/components/AppInputMaskArray/AppInputMaskArray';
 
-const VoceroForm = () => {
-  const navigate = useNavigate();
-  const onGoToForgetPassword = () => {
-    navigate('/forget-password', { tab: 'jwtAuth' });
+const VoceroForm = ({ handleClose = () => {} }) => {
+  const handleSubmit = async (data) => {
+    try {
+      data.cellphone = data.telf_prefijo + data.telefono.replaceAll('-', '');
+      data.dni = data.dni.replaceAll('.', '');
+      delete data.nombre;
+      delete data.apellido;
+      delete data.telefono;
+      delete data.telf_prefijo;
+      console.log(data);
+      await PostVoceros(data);
+      handleClose();
+    } catch (error) {
+      console.error(error);
+      console.log(error);
+      //showError('Error al guardar formulario');
+    }
   };
-
-  const { messages } = useIntl();
-  const RIF_TIPOS = [
-    {
-      id: '1',
-      label: 'J',
-    },
-    {
-      id: '2',
-      label: 'C',
-    },
-    {
-      id: '3',
-      label: 'G',
-    },
-  ];
+  const Formik = useFormik({
+    initialValues: initialValueVoceros,
+    validationSchema: vocerosSchema,
+    onSubmit: handleSubmit,
+  });
   return (
     <>
-      <Formik>
-        {({ isSubmitting }) => (
-          <Form
-            style={{
-              textAlign: 'left',
-              width: '400px',
-              maxWidth: '100%',
-              defaultValue: '1',
-            }}
-            noValidate
-            autoComplete='off'
-          >
-            <Box sx={{ mb: { xs: 5, xl: 12 } }}>
+      <FormikProvider value={Formik}>
+        <Form
+          style={{
+            textAlign: 'left',
+            width: '700px',
+            maxWidth: '100%',
+            defaultValue: '1',
+          }}
+          noValidate
+          autoComplete='off'
+        >
+          <Grid container spacing={3}>
+            <Grid item xs={5} sm={4}>
               <AppAutoComplete
-                options={RIF_TIPOS}
-                label='Tipo rif'
-                defaultValue='2'
+                name='origin'
+                label='Origen'
+                options={CedulaOptions}
+                optionLabel='label'
+                optionValue='id'
                 variant='outlined'
+                size='medium'
                 isClearable={false}
               />
-              <AppTextField
-                name={`dni`}
+            </Grid>
+            <Grid item xs={7} sm={8}>
+              <InputMaskArray
+                name='dni'
                 label='Cédula'
                 variant='outlined'
-                sx={{
-                  width: '100%',
-                  '& .MuiInputBase-input': {
-                    fontSize: 14,
-                  },
-                }}
+                size='medium'
+                mask={'99.999.999'}
+                formik={Formik}
+                handleBlur={() => getPersona(Formik)}
               />
-            </Box>
-
-            <Box sx={{ mb: { xs: 3, xl: 4 } }}>
+            </Grid>
+            <Grid item xs={6}>
               <AppTextField
-                type='password'
-                placeholder={messages['common.password']}
-                label={<IntlMessages id='common.password' />}
-                name='password'
+                name={`nombre`}
+                label='Nombre'
                 variant='outlined'
-                sx={{
-                  width: '100%',
-                  '& .MuiInputBase-input': {
-                    fontSize: 14,
-                  },
-                }}
+                size='medium'
+                disabled={true}
               />
-            </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <AppTextField
+                name={`apellido`}
+                label='Apellido'
+                variant='outlined'
+                size='medium'
+                disabled={true}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <AppAutoComplete
+                name={`telf_prefijo`}
+                label={'Prefijo'}
+                options={TelPrefixOptions}
+                variant='outlined'
+                size='medium'
+                isClearable={false}
+              />
+            </Grid>
+            <Grid item xs={8}>
+              <InputMaskArray
+                formik={Formik}
+                name={`telefono`}
+                label='Teléfono'
+                type='tel'
+                mask={'999-99-99'}
+                variant='outlined'
+                size='medium'
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <AppTextField
+                label='Correo'
+                name={`email`}
+                type='email'
+                variant='outlined'
+                size='medium'
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <AppCheckboxField name='isAccountant' label='Cuenta Dante' />
+            </Grid>
+          </Grid>
 
-            <Box
+          <Box mt={5}>
+            <Button
+              variant='contained'
+              color='primary'
+              type='submit'
               sx={{
-                mb: { xs: 3, xl: 4 },
+                minWidth: 160,
+                fontWeight: Fonts.REGULAR,
+                fontSize: 16,
+                textTransform: 'capitalize',
+                padding: '4px 16px 8px',
               }}
             >
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <Checkbox color='primary' sx={{ ml: -3 }} id='rememberMe' />
-                <Box
-                  aria-labelledby='rememberMe'
-                  component='span'
-                  sx={{
-                    color: 'grey.700',
-                  }}
-                >
-                  <IntlMessages id='common.rememberMe' />
-                </Box>
-              </Box>
-              <Box
-                component='span'
-                sx={{
-                  color: (theme) => theme.palette.primary.main,
-                  fontWeight: Fonts.MEDIUM,
-                  cursor: 'pointer',
-                  display: 'block',
-                  textAlign: 'right',
-                }}
-                onClick={onGoToForgetPassword}
-              >
-                <IntlMessages id='common.forgetPassword' />
-              </Box>
-            </Box>
-
-            <div>
-              <Button
-                variant='contained'
-                color='primary'
-                type='submit'
-                disabled={isSubmitting}
-                sx={{
-                  minWidth: 160,
-                  fontWeight: Fonts.REGULAR,
-                  fontSize: 16,
-                  textTransform: 'capitalize',
-                  padding: '4px 16px 8px',
-                }}
-              >
-                <IntlMessages id='common.login' />
-              </Button>
-            </div>
-          </Form>
-        )}
-      </Formik>
+              Guardar Vocero
+            </Button>
+          </Box>
+        </Form>
+      </FormikProvider>
     </>
   );
 };

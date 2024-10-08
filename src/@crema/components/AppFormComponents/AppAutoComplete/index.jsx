@@ -25,6 +25,7 @@ export default function AppAutoComplete({
   defaultValue = '',
   labelOptions = 'label',
   valueOptions = 'id',
+  size = 'small',
 }) {
   const loading = !disabled && dataLoading;
 
@@ -54,7 +55,7 @@ export default function AppAutoComplete({
           <Autocomplete
             disabled={disabled}
             multiple={multiple}
-            size='small'
+            size={size}
             onChange={(e, val) => {
               onSelectValue(e, val, form);
               handleChange(val);
@@ -145,4 +146,5 @@ AppAutoComplete.propTypes = {
   isClearable: PropTypes.bool,
   labelOptions: PropTypes.string,
   defaultValue: PropTypes.string,
+  size: PropTypes.string,
 };
