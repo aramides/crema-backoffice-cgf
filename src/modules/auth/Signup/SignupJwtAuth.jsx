@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { Checkbox, Grid } from '@mui/material';
 import { Form, Formik, FormikProvider, useFormik } from 'formik';
@@ -14,21 +14,14 @@ import { Link } from 'react-router-dom';
 import AuthWrapper from '../AuthWrapper';
 import { registerSchema } from '@crema/constants/Schemas/RegisterSchema';
 import AppAutocompleteField from '@crema/components/AppFormComponents/AppAutocompleteField';
-// import { FilePond, registerPlugin } from 'react-filepond';
-// import 'filepond/dist/filepond.min.css';
+
 import InputArchive from '@crema/components/AppInputArchive/AppInputArchive';
 import InputMaskArray from '@crema/components/AppInputMaskArray/AppInputMaskArray';
+import { getEstados } from '@crema/services/estados';
+import { getMunicipios } from '@crema/services/municipios';
+import { getParroquias } from '@crema/services/parroquias';
 
-const validationSchema = yup.object({
-  name: yup.string().required(<IntlMessages id='validation.nameRequired' />),
-  email: yup
-    .string()
-    .email(<IntlMessages id='validation.emailFormat' />)
-    .required(<IntlMessages id='validation.emailRequired' />),
-  password: yup
-    .string()
-    .required(<IntlMessages id='validation.passwordRequired' />),
-});
+import { useQuery } from '@tanstack/react-query';
 
 // registerPlugin();
 const SignupJwtAuth = () => {
@@ -125,7 +118,66 @@ const SignupJwtAuth = () => {
       console.log(data);
     },
   });
-  console.log(Formik.values);
+
+  const { data: estados } = useQuery({
+    queryKey: ['estados'],
+    queryFn: () => fetchEstados(),
+  });
+
+  const { data: municipios } = useQuery({
+    queryKey: ['municipios', Formik.values.estadoId],
+    queryFn: () => fetchMunicipios(Formik.values.estadoId),
+    enabled: !!Formik.values.estadoId,
+  });
+
+  const { data: parroquias } = useQuery({
+    queryKey: ['parroquias', Formik.values.idMunicipio],
+    queryFn: () => fetchParroquias(Formik.values.idMunicipio),
+    enabled: !!Formik.values.idMunicipio,
+  });
+
+  const fetchParroquias = async (params) => {
+    try {
+      const response = await getParroquias(params);
+
+      return response.data.rows;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchMunicipios = async (params) => {
+    try {
+      const response = await getMunicipios(params);
+
+      return response.data.rows;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchEstados = async () => {
+    try {
+      const response = await getEstados();
+
+      return response.data.rows;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // useEffect(() => {
+  //   if (Formik.values.estadoId !== '') {
+  //     Formik.setFieldValue('idMunicipio', '');
+  //     Formik.setFieldValue('idParroquia', '');
+  //   }
+  // }, [Formik.values.estadoId]);
+
+  // useEffect(() => {
+  //   if (Formik.values.idMunicipio !== '') {
+  //     Formik.setFieldValue('idParroquia', '');
+  //   }
+  // }, [Formik.values.idMunicipio]);
 
   return (
     <AuthWrapper>
@@ -175,20 +227,45 @@ const SignupJwtAuth = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <AppAutocompleteField name='estadoId' label='Estado' />
+                  <AppAutocompleteField
+                    name='estadoId'
+                    label='Estado'
+                    options={estados}
+                    valueOptions='id'
+                    labelOptions='nombre'
+                    handleChange={() => {
+                      Formik.setFieldValue('idMunicipio', '');
+                      Formik.setFieldValue('idParroquia', '');
+                    }}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <AppAutocompleteField name='idMunicipio' label='Municipio' />
+                  <AppAutocompleteField
+                    name='idMunicipio'
+                    label='Municipio'
+                    options={municipios}
+                    valueOptions='id'
+                    labelOptions='nombre'
+                    handleChange={() => {
+                      Formik.setFieldValue('idParroquia', '');
+                    }}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <AppAutocompleteField name='idParroquia' label='Parroquia' />
+                  <AppAutocompleteField
+                    name='idParroquia'
+                    label='Parroquia'
+                    options={parroquias}
+                    valueOptions='id'
+                    labelOptions='nombre'
+                  />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                {/* <Grid item xs={12} sm={6}>
                   <AppTextField
                     name='nombreComunidad'
                     label='Nombre de la Comunidad'
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} sm={6}>
                   <AppTextField
                     name='nombreComunidad'
@@ -196,7 +273,7 @@ const SignupJwtAuth = () => {
                   />
                 </Grid>
                 {Formik.values.perfil == '2' ? (
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={12} sm={12}>
                     <AppAutocompleteField
                       name='perteneceA'
                       label='Comuna / Circuito'
@@ -231,7 +308,7 @@ const SignupJwtAuth = () => {
                     handleBlur={Formik.onBlur}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={12}>
                   <AppTextField
                     name='email'
                     label='Correo Electronico de la Organizacion'
