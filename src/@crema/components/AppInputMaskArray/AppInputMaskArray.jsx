@@ -48,7 +48,7 @@ const InputMaskArray = ({
       }
     }
   }, [formik.errors]);
-  console.log('mask', errorText);
+
   return (
     <>
       {/* {label && (
