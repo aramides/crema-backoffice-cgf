@@ -54,6 +54,9 @@ const VoceroForm = ({ handleClose = () => {} }) => {
           autoComplete='off'
         >
           <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <h2>Crear vocero</h2>
+            </Grid>
             <Grid item xs={5} sm={4}>
               <AppAutoComplete
                 name='origin'

@@ -27,7 +27,10 @@ export default function AppAutoComplete({
   size = 'small',
 }) {
   const loading = !disabled && dataLoading;
-
+  const defaultValue = {
+    [labelOptions]: '',
+    [valueOptions]: '',
+  };
   const onSelectValue = (e, val, form) => {
     try {
       if (form) form.setFieldValue(name, val[valueOptions]);
@@ -50,12 +53,14 @@ export default function AppAutoComplete({
                 handleChange(val);
               }}
               getOptionLabel={(option) => {
-                return [option[labelOptions]];
+                return option[labelOptions];
               }}
               options={options}
-              value={options.find(
-                (option) => option[valueOptions] === form.values[name],
-              )}
+              value={
+                options.find(
+                  (option) => option[valueOptions] === form.values[name],
+                ) || defaultValue
+              }
               loading={loading}
               name={name}
               autoSelect

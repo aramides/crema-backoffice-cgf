@@ -36,10 +36,6 @@ const Voceros = () => {
       </Button>
       <VoceroTable />
       <Dialog open={open} onClose={handleClose}>
-        <DialogActions>
-          <Button onClick={handleClose}>X</Button>{' '}
-        </DialogActions>
-
         <DialogContent>
           <VoceroForm handleClose={handleClose} />
         </DialogContent>
