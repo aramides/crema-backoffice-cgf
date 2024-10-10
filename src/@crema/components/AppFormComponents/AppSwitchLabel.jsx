@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormControlLabel } from '@mui/material';
 import AppSwitch from './AppSwitch';
 
-const AppSwitchlabel = ({
+const AppSwitchLabel = ({
   name,
   label,
   labelPlacement = 'top',
@@ -38,9 +38,9 @@ const AppSwitchlabel = ({
   );
 };
 
-export default AppSwitchlabel;
+export default AppSwitchLabel;
 
-AppSwitchlabel.propTypes = {
+AppSwitchLabel.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
   labelPlacement: PropTypes.string,

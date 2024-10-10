@@ -5,8 +5,9 @@ import { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-
+import DialogTitle from '@mui/material/DialogTitle';
 import VoceroForm from './voceroForm';
+import VoceroTable from './voceroTable';
 const Voceros = () => {
   const [open, setOpen] = useState(false);
 
@@ -33,14 +34,11 @@ const Voceros = () => {
       <Button variant='outlined' onClick={handleClickOpen}>
         Nuevo vocero
       </Button>
+      <VoceroTable />
       <Dialog open={open} onClose={handleClose}>
         <DialogContent>
-          <VoceroForm />
+          <VoceroForm handleClose={handleClose} />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cerrar</Button>
-          <Button type='submit'>Guardar</Button>
-        </DialogActions>
       </Dialog>
     </>
   );

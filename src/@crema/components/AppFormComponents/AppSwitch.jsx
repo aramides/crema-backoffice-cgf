@@ -7,7 +7,6 @@ const AppSwitch = ({
   name,
   variant = 'outlined',
   color = 'primary',
-  checked = false,
   onChange = () => {},
   handleBlur = () => {},
 }) => {
@@ -44,7 +43,7 @@ AppSwitch.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   variant: PropTypes.string,
-  checked: PropTypes.bool,
   onChange: PropTypes.func,
   handleBlur: PropTypes.func,
+  color: PropTypes.string,
 };

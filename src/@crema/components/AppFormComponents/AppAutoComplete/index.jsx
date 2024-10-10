@@ -4,7 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import PropTypes from 'prop-types';
 import { Chip } from '@mui/material';
-import { Field, Formik } from 'formik';
+import { Field } from 'formik';
 
 export default function AppAutoComplete({
   variant = 'filled',
@@ -22,12 +22,15 @@ export default function AppAutoComplete({
   error,
   multiple = false,
   isClearable = true,
-  defaultValue = '',
   labelOptions = 'label',
   valueOptions = 'id',
+  size = 'small',
 }) {
   const loading = !disabled && dataLoading;
-
+  const defaultValue = {
+    [labelOptions]: '',
+    [valueOptions]: '',
+  };
   const onSelectValue = (e, val, form) => {
     try {
       if (form) form.setFieldValue(name, val[valueOptions]);
@@ -44,18 +47,20 @@ export default function AppAutoComplete({
             <Autocomplete
               disabled={disabled}
               multiple={multiple}
-              size='small'
+              size={size}
               onChange={(e, val) => {
                 onSelectValue(e, val, form);
                 handleChange(val);
               }}
               getOptionLabel={(option) => {
-                return [option[labelOptions]];
+                return option[labelOptions];
               }}
               options={options}
-              value={options.find(
-                (option) => option[valueOptions] === form.values[name],
-              )}
+              value={
+                options.find(
+                  (option) => option[valueOptions] === form.values[name],
+                ) || defaultValue
+              }
               loading={loading}
               name={name}
               autoSelect
@@ -132,4 +137,5 @@ AppAutoComplete.propTypes = {
   isClearable: PropTypes.bool,
   labelOptions: PropTypes.string,
   defaultValue: PropTypes.string,
+  size: PropTypes.string,
 };
