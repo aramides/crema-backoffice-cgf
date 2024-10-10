@@ -37,6 +37,7 @@ const Tablas = ({
   loading,
   columns,
   handleOnRowClick = () => null,
+  getRowId = (row) => row[pageState.rowId] ?? row.id,
 }) => {
   const { data, page, pageSize, total } = pageState;
 
@@ -45,7 +46,7 @@ const Tablas = ({
       <DataGrid
         rows={data}
         columns={columns}
-        getRowId={(row) => row[pageState.rowId] ?? row.id}
+        getRowId={getRowId}
         loading={loading}
         onRowClick={handleOnRowClick}
         rowCount={total}
@@ -74,6 +75,8 @@ Tablas.propTypes = {
   setPageState: PropTypes.func,
   loading: PropTypes.bool,
   columns: PropTypes.array,
+  getRowId: PropTypes.func,
+  handleOnRowClick : PropTypes.func,
 };
 
 export default Tablas;

@@ -12,9 +12,11 @@ const AppSelectField = ({
   label,
   children,
   disabled,
+  variant = 'filled',
   options = [],
   optionLabel = 'label',
   optionValue = 'value',
+  size = 'small',
 }) => {
   return (
     <>
@@ -32,6 +34,8 @@ const AppSelectField = ({
                   id={id}
                   label={label}
                   error={!!errorText}
+                  variant={variant}
+                  size={size}
                 >
                   {options.map((option) => (
                     <MenuItem

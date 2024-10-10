@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 const AppTextField = ({
   label,
   name,
+  disabled = false,
   variant = 'filled',
   fullWidth = true,
-
+  size = 'small',
   multiline = false,
   inputProps = {},
   handleChange = () => {},
@@ -21,10 +22,11 @@ const AppTextField = ({
         <TextField
           name={field.name}
           label={label}
-          size='small'
+          size={size}
           variant={variant}
           helperText={errorText}
           error={!!errorText}
+          disabled={disabled}
           // slotProps={{
           //   input: {
           //     startAdornment: (
@@ -60,9 +62,10 @@ AppTextField.propTypes = {
   variant: PropTypes.string,
   type: PropTypes.string,
   multiline: PropTypes.bool,
-  formik: PropTypes.object,
   fullWidth: PropTypes.bool,
   inputProps: PropTypes.object,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
+  size: PropTypes.string,
+  disabled: PropTypes.bool,
 };

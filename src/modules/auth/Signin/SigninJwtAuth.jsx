@@ -57,7 +57,7 @@ const SigninJwtAuth = () => {
                     placeholder={messages['common.email']}
                     name='email'
                     label={<IntlMessages id='common.email' />}
-                    variant='outlined'
+                    variant='filled'
                     sx={{
                       width: '100%',
                       '& .MuiInputBase-input': {
@@ -73,7 +73,7 @@ const SigninJwtAuth = () => {
                     placeholder={messages['common.password']}
                     label={<IntlMessages id='common.password' />}
                     name='password'
-                    variant='outlined'
+                    variant='filled'
                     sx={{
                       width: '100%',
                       '& .MuiInputBase-input': {

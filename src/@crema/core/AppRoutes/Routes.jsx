@@ -27,6 +27,13 @@ const ProyectosRetornables = React.lazy(
     ),
 );
 
+///CFE
+///Estados
+const Estados = React.lazy(() => import('../../services/estados'));
+const Municipio = React.lazy(() => import('../../services/municipios'));
+// const Parroquias = React.lazy(() => import('../pages/Parroquia/Parroquia'));
+///
+
 export const RoutesConfig = [
   {
     permittedRole: RoutePermittedRole.User,
@@ -69,4 +76,8 @@ export const RoutesConfig = [
     path: '/datosReporte',
     element: <ReportsData />,
   },
+
+  { path: '/estados', element: <Estados /> },
+  { path: '/municipio', element: <Municipio /> },
+  // { path: '/parroquias', element: <Parroquias /> },
 ];

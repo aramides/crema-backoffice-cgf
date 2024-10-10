@@ -7,7 +7,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import '../index.css';
 import MultipleSelectChip from '@crema/components/AppFormComponents/AppMultiSelect';
 import AppIconList from '@crema/components/AppIconList';
-import AppSwitchlabel from '@crema/components/AppFormComponents/AppSwitchlabel';
+import AppSwitchLabel from '@crema/components/AppFormComponents/AppSwitchLabel';
 import { useEffect } from 'react';
 export default function Inputs() {
   const schema = Yup.object().shape({
@@ -63,13 +63,13 @@ export default function Inputs() {
           <FormikProvider value={formik}>
             <Grid container spacing={2}>
               <Grid item xs={12} className='SwitchesForm'>
-                <AppSwitchlabel
+                <AppSwitchLabel
                   name='SubModulo'
                   label='SubModulo'
                   labelPlacement='top'
                 />
 
-                <AppSwitchlabel
+                <AppSwitchLabel
                   name='MostrarenMenu'
                   label='Mostrar en Menu'
                   labelPlacement='top'

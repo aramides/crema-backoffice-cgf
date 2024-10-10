@@ -27,6 +27,8 @@ const InputMaskArray = ({
   arrayKey = '',
   key = '',
   mask,
+  variant = 'filled',
+  size = 'small',
 }) => {
   const [errorText, setErrorText] = useState('');
   const [touched, setTouched] = useState(false);
@@ -48,7 +50,7 @@ const InputMaskArray = ({
       }
     }
   }, [formik.errors]);
-  console.log('mask', errorText);
+
   return (
     <>
       {/* {label && (
@@ -85,8 +87,8 @@ const InputMaskArray = ({
       >
         {(inputProps) => (
           <TextField
-            variant='filled'
-            size='small'
+            variant={variant}
+            size={size}
             label={label}
             key={key ? key : name}
             id={name}
@@ -159,4 +161,6 @@ InputMaskArray.propTypes = {
   arrayName: PropTypes.string,
   arrayIndex: PropTypes.string,
   arrayKey: PropTypes.string,
+  variant: PropTypes.string,
+  size: PropTypes.string,
 };
