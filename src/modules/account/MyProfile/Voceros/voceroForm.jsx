@@ -12,25 +12,29 @@ import { TelPrefixOptions } from '@crema/constants/Options/TelPrefixOptions';
 import { getPersona, PostVoceros } from '@crema/helpers/VoceroHelper';
 import AppCheckboxField from '@crema/components/AppFormComponents/AppCheckboxField';
 import InputMaskArray from '@crema/components/AppInputMaskArray/AppInputMaskArray';
+import PropTypes from 'prop-types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const VoceroForm = ({ handleClose = () => {} }) => {
-  const handleSubmit = async (data) => {
-    try {
+  const queryClient = useQueryClient();
+
+  const { mutate: handleSubmit } = useMutation({
+    mutationFn: async (data) => {
       data.cellphone = data.telf_prefijo + data.telefono.replaceAll('-', '');
       data.dni = data.dni.replaceAll('.', '');
       delete data.nombre;
       delete data.apellido;
       delete data.telefono;
       delete data.telf_prefijo;
-      console.log(data);
       await PostVoceros(data);
       handleClose();
-    } catch (error) {
-      console.error(error);
-      console.log(error);
-      //showError('Error al guardar formulario');
-    }
-  };
+    }, // Replace with your mutation function
+    onSuccess: () => {
+      // Invalidate queries related to the mutation
+      queryClient.invalidateQueries({ queryKey: ['voceros'] });
+    },
+  });
+
   const Formik = useFormik({
     initialValues: initialValueVoceros,
     validationSchema: vocerosSchema,
@@ -148,3 +152,7 @@ const VoceroForm = ({ handleClose = () => {} }) => {
   );
 };
 export default VoceroForm;
+
+VoceroForm.propTypes = {
+  handleClose: PropTypes.func,
+};

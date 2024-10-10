@@ -1,42 +1,34 @@
 import Tablas from '@crema/components/AppTablas/Tablas';
 import Paper from '@mui/material/Paper';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { voceroColumns } from './voceroColumns';
 import { GetVoceros } from '@crema/helpers/VoceroHelper';
+import { useQuery } from '@tanstack/react-query';
 
-const VoceroTable = (open) => {
+const VoceroTable = () => {
   const [pageState, setPageState] = useState({
-    isLoading: false,
+    rowId: '_id',
+    page: 0,
+    pageSize: 10,
     data: [],
     total: 0,
-    page: 1,
-    pageSize: 10,
+  });
+
+  const { isLoading } = useQuery({
+    queryKey: ['voceros'],
+    queryFn: () => fetchData(),
   });
 
   async function fetchData() {
-    setPageState((prev) => {
-      return { ...prev, isLoading: true };
-    });
-    try {
-      const response = await GetVoceros();
-      const data = response.data;
-      setPageState((prev) => ({
-        ...prev,
-        total: data.length,
-        data: data,
-      }));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setPageState((prev) => {
-        return { ...prev, isLoading: false };
-      });
-    }
+    const response = await GetVoceros();
+    const data = response.data;
+    setPageState((prev) => ({
+      ...prev,
+      total: data.length,
+      data: data,
+    }));
+    return data;
   }
-
-  useEffect(() => {
-    fetchData();
-  }, [open]);
 
   return (
     <>
@@ -46,6 +38,7 @@ const VoceroTable = (open) => {
           setPageState={setPageState}
           columns={voceroColumns}
           getRowId={(row) => row._id}
+          loading={isLoading}
         />
       </Paper>
     </>
