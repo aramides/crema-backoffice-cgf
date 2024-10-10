@@ -1,12 +1,12 @@
 import FiberSmartRecordIcon from '@mui/icons-material/FiberSmartRecord';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-
+import TaskRoundedIcon from '@mui/icons-material/TaskRounded';
 const routesConfig = [
   {
     id: 'app',
-    title: 'Sample',
-    messageId: 'sidebar.sample',
+    title: 'menu',
+    messageId: 'MENU',
     type: 'group',
     children: [
       {
@@ -17,29 +17,39 @@ const routesConfig = [
         icon: <EqualizerIcon />,
         url: '/dashboard',
       },
+
       {
-        id: 'gestion-directores',
-        title: 'Gestion Directores',
-        messageId: 'sidebar.sample.gestionDirectores',
-        type: 'item',
-        icon: <FiberSmartRecordIcon />,
-        url: '/gestion-directores',
-      },
-      {
-        id: 'Inputs',
+        id: 'proyectos',
         title: 'Inputs',
-        messageId: 'sidebar.sample.inputs',
-        type: 'item',
-        icon: <FiberSmartRecordIcon />,
-        url: '/inputs',
+        messageId: 'Proyectos',
+        type: 'collapse',
+
+        children: [
+          {
+            id: 'Inputs',
+            title: 'proyectos-retornables',
+            messageId: 'Proyectos Retornables',
+            type: 'item',
+            icon: <FiberSmartRecordIcon />,
+            url: '/proyectos/retornables',
+          },
+        ],
       },
+    ],
+  },
+  {
+    id: 'Departamentos',
+    title: 'Departamentos',
+    messageId: 'Departamentos',
+    type: 'collapse',
+    children: [
       {
-        id: 'reportsData',
-        title: 'Datos de los reportes',
-        messageId: 'sidebar.reportsData.label',
+        id: 'Departamentos',
+        title: 'Departamentos',
+        messageId: 'Departamentos',
         type: 'item',
-        icon: <EqualizerIcon />,
-        url: '/datosReporte',
+        icon: <TaskRoundedIcon />,
+        url: '/departamentos/ure',
       },
     ],
   },
@@ -48,7 +58,7 @@ const routesConfig = [
     id: 'Admin',
     title: 'UserAdmin',
     messageId: 'sidebar.sample.useradmin',
-    type: 'group',
+    type: 'collapse',
     children: [
       {
         id: 'Permisos',
@@ -81,14 +91,6 @@ const routesConfig = [
         type: 'item',
         icon: <ManageAccountsIcon />,
         url: '/Administracion/Usuarios',
-      },
-      {
-        id: 'Formulario',
-        title: 'Formulario',
-        messageId: 'sidebar.sample.Formulario',
-        type: 'item',
-        icon: <ManageAccountsIcon />,
-        url: '/Administracion/Formulario',
       },
     ],
   },
